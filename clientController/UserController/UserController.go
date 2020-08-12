@@ -12,9 +12,9 @@ type UserController struct {
 
 func (this *UserController)ShowMenu(){
 	fmt.Println(">>>>>>>>>>>操作菜单<<<<<<<<<<")
-	fmt.Println("/\\/\\/\\/\\/\\/\\1、查看列表/\\/\\/\\/\\/\\/\\")
-	fmt.Println("/\\/\\/\\/\\/\\/\\2、发送消息/\\/\\/\\/\\/\\/\\")
-	fmt.Println("/\\/\\/\\/\\/\\/\\3、退出消息/\\/\\/\\/\\/\\/\\")
+	fmt.Println("- 1、查看列表")
+	fmt.Println("- 2、发送消息")
+	fmt.Println("- 3、退出消息")
 	fmt.Println("")
 	fmt.Println("")
 	var operation int

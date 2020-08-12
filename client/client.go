@@ -25,25 +25,17 @@ func main() {
 
 		//判断用户操作
 		switch operation {
-		case 1,2://用户登录、注册
-			goto EXITLOOP
+		case 1://用户登录、注册
+			login := LoginController.LoginController{}
+			login.Login()
+		case 2:
+			login := LoginController.LoginController{}
+			login.Register()
 		case 3://退出应用
 			os.Exit(0)
 		default:
 			fmt.Println("输入指令错误，请重新输入。。。\n")
 		}
-	}
-
-EXITLOOP:
-
-	//判断用户操作
-	switch operation {
-	case 1://用户登录
-		login := LoginController.LoginController{}
-		login.Login()
-	case 2:
-		login := LoginController.LoginController{}
-		login.Register()
 	}
 }
 

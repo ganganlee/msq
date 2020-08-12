@@ -11,6 +11,7 @@ import (
 var RdsPool *redis.Pool
 //服务器入口文件
 func main() {
+	fmt.Println("服务器启中。。。")
 	//端口监听
 	listen,err := net.Listen("tcp","0.0.0.0:8888")
 	if err != nil {
@@ -21,13 +22,14 @@ func main() {
 	defer listen.Close()
 
 	//开启redis
-
+	fmt.Println("redis启动中。。。")
 	RdsPool = RedisPool()
 	defer RdsPool.Close()
 
 	userDao := userModel.NewUserDao(RdsPool)
 	userModel.UserD = userDao
 
+	fmt.Println("服务器启动成功，等待连接")
 	//等待连接
 	for {
 		conn,err := listen.Accept()

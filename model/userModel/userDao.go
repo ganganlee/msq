@@ -1,6 +1,7 @@
 package userModel
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 )
@@ -21,13 +22,19 @@ func NewUserDao(rds *redis.Pool)*UserDao{
 func (this *UserDao)GetUserInfo(userId int,password string)(user *UserModel,err error){
 	//从缓存查找数据
 	redisConn := this.rds.Get()
-	res ,err := redis.String(redisConn.Do("hget","msq_user",userId))
+	res ,err := redis.Bytes(redisConn.Do("hget","msq_user",userId))
 	if err != nil {
 		return nil,err
 	}
 
-	fmt.Println(res)
-	return nil,nil
+	model := UserModel{}
+	err = json.Unmarshal(res,&model)
+	if err != nil {
+		fmt.Println(err)
+		return nil,err
+	}
+
+	return &model,nil
 }
 
 /**

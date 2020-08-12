@@ -141,11 +141,9 @@ func (this *LoginController)Register()  {
 		fmt.Printf("将消息转为结构体失败 err:%v",err)
 		return
 	}
-	fmt.Println(loginRes)
 	//判断登陆状态
 	if loginRes.Code != 200{
-		fmt.Println("登陆失败，用户名或密码错误")
-		fmt.Println(loginRes)
+		fmt.Println(loginRes.Msg)
 		return
 	}else {
 		//登陆成功，异步接受服务器推送消息，显示登陆成功后的菜单

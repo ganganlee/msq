@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net"
 	"newStudy/msq/common/message"
 	"newStudy/msq/serverController/handleLogin"
@@ -32,7 +33,11 @@ func (this *HandleMiddle)Handle(){
 	for {
 		n,err := this.Conn.Read(this.Msg[:1024])
 		if err != nil {
-			fmt.Printf("获取%v消息失败，断开请求 err:%v",this.Conn.RemoteAddr(),err)
+			if err == io.EOF{
+				fmt.Printf("%v离线\n",this.Conn.RemoteAddr(),err)
+			}else {
+				fmt.Printf("获取%v消息失败，断开请求 err:%v\n",this.Conn.RemoteAddr(),err)
+			}
 			break
 		}
 
