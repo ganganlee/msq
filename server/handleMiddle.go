@@ -60,7 +60,7 @@ func (this *HandleMiddle)Handle(){
 		case message.LoginMsgType://用户登陆
 			login 	:= handleLogin.InitHandleLogin(this.Conn,msgStruct.Data)
 			err 	= login.Login()
-		case message.RegisterMsgType:
+		case message.RegisterMsgType://用户注册
 			login 	:= handleLogin.InitHandleLogin(this.Conn,msgStruct.Data)
 			err 	= login.Register()
 		}

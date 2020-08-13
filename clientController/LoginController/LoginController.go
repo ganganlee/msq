@@ -72,7 +72,7 @@ func (this *LoginController)Login()  {
 		return
 	}else {
 		//登陆成功，异步接受服务器推送消息，显示登陆成功后的菜单
-		go HandleServerMsg.HandleServerMsg()
+		go HandleServerMsg.HandleServerMsg(conn)
 
 		user := UserController.UserController{
 			Conn:conn,
@@ -146,15 +146,8 @@ func (this *LoginController)Register()  {
 		fmt.Println(loginRes.Msg)
 		return
 	}else {
-		//登陆成功，异步接受服务器推送消息，显示登陆成功后的菜单
-		go HandleServerMsg.HandleServerMsg()
+		//注册成功
+		fmt.Println("注册成功，请登录。。。")
 
-		user := UserController.UserController{
-			Conn:conn,
-		}
-
-		for {
-			user.ShowMenu()
-		}
 	}
 }

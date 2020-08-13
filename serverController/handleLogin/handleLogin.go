@@ -15,6 +15,7 @@ import (
 type HandleLogin struct {
 	conn net.Conn
 	data string
+	UserId int
 }
 
 func InitHandleLogin(conn net.Conn,data string) *HandleLogin {
@@ -56,6 +57,13 @@ func (this *HandleLogin)Login()(err error){
 		//验证成功
 		logResMsg.Code 	= 200
 		logResMsg.Msg 	= "ok"
+
+		//用户登陆成功，将用户信息加入到在线列表
+		this.UserId = loginMsg.UserId
+		UserMag.AddOnlineUser(this)
+
+		//发送在线列表
+		go this.sendOnlineUser()
 	}
 
 	//获取msgStrust json字符串
@@ -103,4 +111,18 @@ func (this *HandleLogin)Register()(err error){
 
 	//响应数据
 	return nil
+}
+
+//发送在线列表
+func (this *HandleLogin)sendOnlineUser(){
+	//获取所有用户
+	var list []int
+	for key,_ := range UserMag.AllOnlineUser() {
+
+		list = append(list, key)
+	}
+
+	msgStrust := message.Message{}
+	msgStrust.Send(message.LoginMsgResType,logResMsg,this.conn)
+	fmt.Println(list)
 }
