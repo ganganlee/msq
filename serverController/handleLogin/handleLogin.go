@@ -66,6 +66,9 @@ func (this *HandleLogin)Login()(err error){
 
 		//发送在线列表
 		go this.sendOnlineUser()
+		//发送用户上线
+		go UserMag.SendOnlineNotify(this)
+
 	}
 
 	//获取msgStrust json字符串
@@ -120,6 +123,16 @@ func (this *HandleLogin)sendOnlineUser(){
 	//获取所有用户
 	list := UserMag.AllOnlineUser()
 
+	//过滤自己
+	aa := UserManage{
+		Online: make(map[int]*HandleLogin, 1024),
+	}
+	for key,val := range list{
+		if key != this.UserId {
+			aa.Online[key] = val
+		}
+	}
+
 	msgStrust := message.Message{}
-	msgStrust.Send(message.OnlineMsgType,list,this.conn)
+	msgStrust.Send(message.OnlineMsgType,aa.Online,this.conn)
 }
