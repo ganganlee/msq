@@ -56,6 +56,6 @@ func (this *UserManage) SendOnlineNotify(user *HandleLogin) {
 
 		msg := fmt.Sprintf("用户 %v 上线",user.Nickname)
 		msgStrust := message.Message{}
-		msgStrust.Send(message.OnlineMsgType,msg,val.conn)
+		msgStrust.Send(message.TextMsgType,msg,val.conn)
 	}
 }

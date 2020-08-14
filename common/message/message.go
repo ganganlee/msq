@@ -13,6 +13,7 @@ const (
 	LoginMsgResType = "LoginResMsg"
 	RegisterMsgType = "RegisterMsg"
 	OnlineMsgType 	= "OnlineMsgType"
+	TextMsgType 	= "TextMsgType"
 )
 
 //定义返回状态常量

@@ -21,6 +21,8 @@ func HandleServerMsg(conn net.Conn){
 		switch msg.Type {
 		case message.OnlineMsgType:
 			HandleOnlineMsg(msg.Data)
+		case message.TextMsgType:
+			fmt.Println(msg.Data)
 		}
 	}
 }

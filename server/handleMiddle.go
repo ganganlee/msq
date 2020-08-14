@@ -63,6 +63,9 @@ func (this *HandleMiddle)Handle(){
 		case message.RegisterMsgType://用户注册
 			login 	:= handleLogin.InitHandleLogin(this.Conn,msgStruct.Data)
 			err 	= login.Register()
+		case message.OnlineMsgType://获取在线列表
+			login 	:= handleLogin.InitHandleLogin(this.Conn,msgStruct.Data)
+			login.GetOnlineList()
 		}
 
 		if err != nil {

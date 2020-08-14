@@ -3,6 +3,7 @@ package UserController
 import (
 	"fmt"
 	"net"
+	."newStudy/msq/clientController/LoginController"
 	"os"
 )
 
@@ -10,7 +11,7 @@ type UserController struct {
 	Conn net.Conn
 }
 
-func (this *UserController)ShowMenu(){
+func (this *UserController)ShowMenu(login *LoginController){
 	fmt.Println(">>>>>>>>>>>操作菜单<<<<<<<<<<")
 	fmt.Println("- 1、查看列表")
 	fmt.Println("- 2、发送消息")

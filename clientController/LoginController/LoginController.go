@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"net"
 	"newStudy/msq/clientController/HandleServerMsg"
-	"newStudy/msq/clientController/UserController"
+	"newStudy/msq/common/encodeMsg"
 	"newStudy/msq/common/login"
 	"newStudy/msq/common/message"
-	"newStudy/msq/common/encodeMsg"
+	"os"
 )
 
 type LoginController struct {
 	login.LoginMsg
+	conn net.Conn
 }
 
 /**
@@ -73,13 +74,9 @@ func (this *LoginController)Login()  {
 	}else {
 		//登陆成功，异步接受服务器推送消息，显示登陆成功后的菜单
 		go HandleServerMsg.HandleServerMsg(conn)
-
-		user := UserController.UserController{
-			Conn:conn,
-		}
-
+		this.conn = conn
 		for {
-			user.ShowMenu()
+			this.ShowMenu()
 		}
 	}
 }
@@ -148,6 +145,38 @@ func (this *LoginController)Register()  {
 	}else {
 		//注册成功
 		fmt.Println("注册成功，请登录。。。")
+	}
+}
+
+/**
+登陆操作菜单
+ */
+func (this *LoginController)ShowMenu(){
+	fmt.Println(">>>>>>>>>>>操作菜单<<<<<<<<<<")
+	fmt.Println("- 1、查看列表")
+	fmt.Println("- 2、发送消息")
+	fmt.Println("- 3、退出消息")
+	fmt.Println("")
+	fmt.Println("")
+	var operation int
+	_,err := fmt.Scan(&operation)
+	if err != nil {
+		fmt.Printf("输入错误 err:%v",err)
+	}
+
+	switch operation {
+	case 1:
+		fmt.Println("查看列表")
+		msg := message.Message{}
+		err = msg.Send(message.OnlineMsgType,this,this.conn)
+		if err != nil {
+			fmt.Println(err)
+		}
+	case 2:
+		fmt.Println("发送消息")
+	case 3:
+		fmt.Println("退出系统")
+		os.Exit(0)
 
 	}
 }

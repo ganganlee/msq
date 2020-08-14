@@ -65,7 +65,7 @@ func (this *HandleLogin)Login()(err error){
 		UserMag.AddOnlineUser(this)
 
 		//发送在线列表
-		go this.sendOnlineUser()
+		go this.SendOnlineUser()
 		//发送用户上线
 		go UserMag.SendOnlineNotify(this)
 
@@ -119,7 +119,7 @@ func (this *HandleLogin)Register()(err error){
 }
 
 //发送在线列表
-func (this *HandleLogin)sendOnlineUser(){
+func (this *HandleLogin)SendOnlineUser(){
 	//获取所有用户
 	list := UserMag.AllOnlineUser()
 
@@ -135,4 +135,36 @@ func (this *HandleLogin)sendOnlineUser(){
 
 	msgStrust := message.Message{}
 	msgStrust.Send(message.OnlineMsgType,aa.Online,this.conn)
+}
+
+//初始化用户信息
+func (this *HandleLogin)EncodeUserInfo()error{
+	//将data反序列化为用户登陆结构体
+	loginMsg := login.LoginMsg{}
+	err := json.Unmarshal([]byte(this.data),&loginMsg)
+	if err != nil {
+		return errors.New("反序列化失败")
+
+	}
+
+	this.UserId = loginMsg.UserId
+	userLogin := userModel.UserD
+	userM,err := userLogin.GetUserInfo(loginMsg.UserId,loginMsg.Password)
+	if err != nil {
+		return  err
+	}
+	this.Nickname 	= userM.Nickname
+	return nil
+}
+
+//获取在线列表
+func (this *HandleLogin)GetOnlineList(){
+	err := this.EncodeUserInfo()
+	if err != nil {
+		msg := fmt.Sprintf("%v",err)
+		msgStrust := message.Message{}
+		msgStrust.Send(message.TextMsgType,msg,this.conn)
+	}
+
+	this.SendOnlineUser()
 }
