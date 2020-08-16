@@ -17,6 +17,7 @@ type HandleLogin struct {
 	data string
 	UserId int
 	Nickname string
+	Content string
 }
 
 func InitHandleLogin(conn net.Conn,data string) *HandleLogin {
@@ -154,6 +155,7 @@ func (this *HandleLogin)EncodeUserInfo()error{
 		return  err
 	}
 	this.Nickname 	= userM.Nickname
+	this.Content	= loginMsg.Content
 	return nil
 }
 
@@ -167,4 +169,26 @@ func (this *HandleLogin)GetOnlineList(){
 	}
 
 	this.SendOnlineUser()
+}
+
+func (this *HandleLogin)GroupChat(){
+
+
+	err := this.EncodeUserInfo()
+	if err != nil {
+		msg := fmt.Sprintf("%v",err)
+		msgStrust := message.Message{}
+		msgStrust.Send(message.TextMsgType,msg,this.conn)
+	}
+
+	//遍历在线列表，群发消息
+	list := UserMag.AllOnlineUser()
+
+	msgStrust := message.Message{}
+	for key,val := range list{
+		if key != this.UserId {
+			msg := fmt.Sprintf("%v:%v",this.Nickname,this.Content)
+			msgStrust.Send(message.TextMsgType,msg,val.conn)
+		}
+	}
 }

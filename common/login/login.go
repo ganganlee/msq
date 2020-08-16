@@ -5,6 +5,7 @@ type LoginMsg struct {
 	UserId int //用户账户
 	Password string //用户密码
 	Nickname string //用户昵称
+	Content string //发送消息
 }
 
 //定义登陆返回消息结构体

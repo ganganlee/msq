@@ -14,6 +14,7 @@ import (
 type LoginController struct {
 	login.LoginMsg
 	conn net.Conn
+	Content string
 }
 
 /**
@@ -173,10 +174,23 @@ func (this *LoginController)ShowMenu(){
 			fmt.Println(err)
 		}
 	case 2:
-		fmt.Println("发送消息")
+		fmt.Println("input you want say...")
+		_,err := fmt.Scan(&this.Content)
+		if err != nil {
+			fmt.Println("输入内容有误")
+			break;
+		}
+		this.GroupChat()
 	case 3:
 		fmt.Println("退出系统")
 		os.Exit(0)
+	}
+}
 
+func (this *LoginController)GroupChat(){
+	msg := message.Message{}
+	err := msg.Send(message.GroupChatMsgType,this,this.conn)
+	if err != nil {
+		fmt.Println(err)
 	}
 }

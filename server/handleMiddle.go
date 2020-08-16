@@ -66,6 +66,9 @@ func (this *HandleMiddle)Handle(){
 		case message.OnlineMsgType://获取在线列表
 			login 	:= handleLogin.InitHandleLogin(this.Conn,msgStruct.Data)
 			login.GetOnlineList()
+		case message.GroupChatMsgType://群发消息
+			login 	:= handleLogin.InitHandleLogin(this.Conn,msgStruct.Data)
+			login.GroupChat()
 		}
 
 		if err != nil {
